@@ -24,7 +24,7 @@ type imageUsecase struct {
 
 func NewImageUsecase() ImageUsecase {
 	return imageUsecase{
-		watermarkPath: "./watermark.png",
+		watermarkPath: "./public/watermark.png",
 		maxHeight:     720,
 		maxWidth:      1280,
 	}

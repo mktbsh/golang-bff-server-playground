@@ -17,7 +17,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Gzip())
 	e.Static("/", "public")
-	e.Static("/images", "images")
+	e.Static("/__LOCAL__", "__LOCAL__")
 
 	api := e.Group("/api")
 
@@ -49,7 +49,7 @@ func upload(c echo.Context) error {
 
 	usecase := usecases.NewImageUsecase()
 
-	err = usecase.InsertWatermark(src, fmt.Sprintf("images/%s", name))
+	err = usecase.InsertWatermark(src, fmt.Sprintf("__LOCAL__/images/%s", name))
 	if err != nil {
 		log.Fatal(err)
 		return err
@@ -57,7 +57,7 @@ func upload(c echo.Context) error {
 
 	return c.HTML(http.StatusOK, fmt.Sprintf(`
 		<p>File %s uploaded successfully with fields name=%s.</p>
-		<img src="/images/%s" decode="async" alt="" />
+		<img src="/__LOCAL__/images/%s" decode="async" alt="" />
 		<a href="/">go back</a>
 	`, file.Filename, name, name))
 }
