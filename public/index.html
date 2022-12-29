@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Single file upload</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+				<style>
+					h1 {
+						font-family: 'Anton', sans-serif;
+					}
+				</style>
+</head>
+<body>
+<h1>Copyright Company Name</h1>
+
+<h2>Upload single file with fields</h2>
+
+<form action="/api/images" method="post" enctype="multipart/form-data">
+    Name: <input type="text" name="name"><br>
+    Files: <input type="file" name="file" accept="image/*"><br><br>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
