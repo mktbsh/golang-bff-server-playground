@@ -17,32 +17,26 @@ type ImageUsecase interface {
 }
 
 type imageUsecase struct {
-	watermarkPath string
-	maxHeight     int
-	maxWidth      int
+	maxHeight      int
+	maxWidth       int
+	watermarkImage *image.NRGBA
 }
 
 func NewImageUsecase() ImageUsecase {
+	wmImg, err := loadWatermark("./public/watermark.png")
+	if err != nil {
+		panic(err)
+	}
+
 	return imageUsecase{
-		watermarkPath: "./public/watermark.png",
-		maxHeight:     720,
-		maxWidth:      1280,
+		maxHeight:      720,
+		maxWidth:       1280,
+		watermarkImage: wmImg,
 	}
 }
 
 func (u imageUsecase) InsertWatermark(srcImage io.Reader, fileName string) error {
 	srcImg, _, err := image.Decode(srcImage)
-	if err != nil {
-		return err
-	}
-
-	wmFile, err := os.Open(u.watermarkPath)
-	if err != nil {
-		return err
-	}
-	defer wmFile.Close()
-
-	wmImg, _, err := image.Decode(wmFile)
 	if err != nil {
 		return err
 	}
@@ -65,7 +59,7 @@ func (u imageUsecase) InsertWatermark(srcImage io.Reader, fileName string) error
 
 	draw.CatmullRom.Scale(resizedImage, resizedImage.Bounds(), srcImg, srcImg.Bounds(), draw.Over, nil)
 
-	wmImg = u.resizeWatermark(wmImg)
+	wmImg := u.watermarkImage
 	x := resizedImage.Bounds().Dx() - wmImg.Bounds().Dx()
 	y := resizedImage.Bounds().Dy() - wmImg.Bounds().Dy()
 
@@ -91,10 +85,21 @@ func (u imageUsecase) InsertWatermark(srcImage io.Reader, fileName string) error
 
 }
 
-func (u imageUsecase) resizeWatermark(src image.Image) image.Image {
+func loadWatermark(path string) (*image.NRGBA, error) {
+	wmFile, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer wmFile.Close()
+
+	src, _, err := image.Decode(wmFile)
+	if err != nil {
+		return nil, err
+	}
+
 	width := src.Bounds().Dx() / 2
 	height := src.Bounds().Dy() / 2
 	dst := image.NewNRGBA(image.Rect(0, 0, width, height))
 	draw.CatmullRom.Scale(dst, dst.Bounds(), src, src.Bounds(), draw.Over, nil)
-	return dst
+	return dst, nil
 }
