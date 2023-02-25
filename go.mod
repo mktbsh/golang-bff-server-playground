@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/labstack/echo/v4 v4.10.0
-	golang.org/x/image v0.2.0
+	golang.org/x/image v0.5.0
 )
 
 require (
@@ -17,6 +17,6 @@ require (
 	golang.org/x/crypto v0.2.0 // indirect
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/time v0.2.0 // indirect
 )
